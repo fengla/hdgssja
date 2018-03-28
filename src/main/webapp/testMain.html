@@ -1,0 +1,108 @@
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>登录 - meetu</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!--<link href="font-awesome/css/font-awesome.css" rel="stylesheet">-->
+
+    <!--<link href="css/animate.css" rel="stylesheet">-->
+    <link href="css/style.css" rel="stylesheet">
+
+    <!--todo: 改成从本地加载angularJS文件-->
+    <script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Toastr style -->
+    <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet">
+
+    <!-- Gritter -->
+    <link href="js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+
+</head>
+<body ng-app='mainApp' class="gray-bg">
+
+<div ng-view></div>
+
+<script src="https://apps.bdimg.com/libs/angular-route/1.3.13/angular-route.js"></script>
+<script type="text/javascript" src="js/meetuController.js"></script>
+<script type="text/javascript" src="js/meetuInit.js"></script>
+<script>
+        var as = angular.module('mainApp',['ngRoute']);
+        as.config(['$routeProvider', function($routeProvider){
+                $routeProvider
+                .when('/',{templateUrl:'/login_meetu_ease.html'})
+                .when('/profile',{controller: 'profileCtrl', templateUrl:'/profile_meetu_ease.html'})
+                .when('/printers',{templateUrl:'这是打印机页面'})
+                .otherwise({redirectTo:'/'});
+            }]);
+
+        as.controller("loginCtrl", function($scope, $http, $location) {
+            var load = function () {};
+
+            load();
+
+            $scope.user = {};
+            $scope.submitForm = function() {
+                $http({
+                        method: 'GET',
+                        url: '/login',
+                        params: $scope.user,
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        }
+                    })
+                    .success(function(data) {
+                        console.log(data);
+                        // todo : 页面跳转@here...
+                        var user = data;
+                        $scope.$emit('event:loginRequest', user);
+                        $location.path('/profile');
+                    });
+            };
+        });
+
+        as.controller("profileCtrl", function($scope, $http, $location, $rootScope) {
+
+            $scope.user = $rootScope.user;
+            ／/guess：进入这个页面后会自动执行这里的代码，因此可以在这里加入一个load方法，并执行（从数据库中获取数据）
+            var load = function($scope){
+            //todo here $http.get()
+            }
+            load();
+            //以上是我猜想的代码。。可以一试。。先定义一个controller 试试看看
+
+        });
+
+        as.run(function ($rootScope, $http, $route, $location) {
+            $rootScope.$on('event:loginRequest', function (event, user) {//这里填写的user是从emit那里接收到的数据。
+                console.log(user);
+                $rootScope.user=user;
+                $location.path('/profile');
+
+            <!--$http.get('api/me')-->
+                    <!--.success(function (data) {-->
+                        <!--$rootScope.authenticated = true;-->
+                        <!--$rootScope.name = data.username;-->
+                        <!--$rootScope.$broadcast('event:loginConfirmed');-->
+                    <!--})-->
+                    <!--.error(function (data) {-->
+                        <!--console.log('login failed...@' + data);-->
+                    <!--});-->
+            });
+
+
+        });
+</script>
+
+
+
+</body>
+</html>

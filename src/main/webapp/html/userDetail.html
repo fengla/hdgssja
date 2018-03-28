@@ -1,0 +1,85 @@
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+  <title>SpringMVC 用户详情</title>
+
+  <!-- 新 Bootstrap 核心 CSS 文件 -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+
+
+
+  <![endif]-->
+
+  <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+  <script src="/js/jquery.min.js"></script>
+
+  <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+  <script src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+  <h1>SpringMVC 用户详情</h1>
+  <hr/>
+
+  <table class="table tavble-bordered table-striped">
+    <tr>
+        <th>user</th>
+        <td id="user">${user}</td>
+    </tr>
+    <tr>
+      <th>we_id</th>
+      <td id="user.we_id">${user.we_id}</td>
+    </tr>
+    <tr>
+      <th>tel</th>
+      <td id="user.tel">${user.tel}</td>
+    </tr>
+    <tr>
+      <th>age</th>
+      <td id="user.age">${user.age}</td>
+    </tr>
+    <tr>
+      <th>remark</th>
+      <td id="user.remark">${user.remark}</td>
+    </tr>
+  </table>
+</div>
+
+<!--ajax请求数据并填充表单-->
+<script type='text/javascript'>
+$(document).ready(function () {
+                alert("jquery====》document ready");
+                //下面调用ajax
+                $.ajax({
+                  type: "get",
+                  url: "http://localhost:8080/userDetail",
+                  //contentType : "application/x-www-form-urlencoded; charset=UTF-8",//可选？
+                  //data: ,//请求参数？
+                  dataType: "json",
+                  success: function (res) {
+                    document.getElementById("user.we_id").innerHTML=res.we_id;
+                    document.getElementById("user.age").innerHTML=res.age;
+                    document.getElementById("user.tel").innerHTML=res.tel;
+                    document.getElementById("user.remark").innerHTML=res.remark;
+                    <!--alert(res.we_id);-->
+                    <!--alert(res.age);-->
+                    <!--alert(res.tel);-->
+                    <!--alert(res.remark);-->
+                    //layer.close(ii);
+                  }
+                });
+});
+</script>
+
+
+</body>
+</html>
